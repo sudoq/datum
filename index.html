@@ -99,7 +99,7 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${holiday.name}</td>
-                    <td>${holiday.date}</td>
+                    <td>${holiday.date.split('-').reverse().join('/')}</td>
                     <td>${holiday.daysRemaining}</td>
                 `;
                 holidaysContainer.appendChild(row);
