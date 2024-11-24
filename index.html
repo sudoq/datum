@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datum</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background-color: #e0f7fa;
+            color: #006064;
+        }
+        h1 {
+            color: #00796b;
+            text-shadow: 2px 2px #004d40;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+            background-color: #b2ebf2;
+            border: 2px solid #00796b;
+        }
+        th, td {
+            border: 1px solid #00796b;
+            padding: 10px;
+            font-size: 1.2em;
+        }
+        th {
+            background-color: #80deea;
+        }
+        td {
+            background-color: #e0f7fa;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nedräkning</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Tillfälle</th>
+                <th>Datum</th>
+                <th>Dagar kvar</th>
+            </tr>
+        </thead>
+        <tbody id="holidays"></tbody>
+    </table>
+
+    <script>
+        const holidays = [
+            { name: "Julafton", date: "12-24" },
+            { name: "Nyårsafton", date: "12-31" },
+            { name: "Elliot", date: "10-19" },
+            { name: "Aron", date: "02-03" },
+            { name: "Paulina", date: "03-10" },
+            { name: "Simon", date: "04-24" },
+            { name: "Pixi", date: "04-25" },
+            { name: "Mormor", date: "02-23" },
+            { name: "Max", date: "03-09" },
+            { name: "Hugo", date: "06-26" },
+            { name: "Tyr", date: "13-10" },
+            { name: "Farfar", date: "05-05" },
+            { name: "Farmor", date: "03-07" },
+            { name: "Morfar", date: "17-08" },
+            { name: "Elvira", date: "17-08" },
+            { name: "Valborg", date: "04-30" },
+            { name: "Nationaldagen", date: "06-06" },
+            { name: "Kanelbullens dag", date: "10-04" },
+        ];
+
+        function calculateDaysRemaining(monthDay) {
+            const today = new Date();
+            const [month, day] = monthDay.split('-').map(Number);
+            let holidayDate = new Date(today.getFullYear(), month - 1, day);
+
+            if (holidayDate < today) {
+                holidayDate.setFullYear(today.getFullYear() + 1);
+            }
+
+            const timeDiff = holidayDate - today;
+            const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            return daysRemaining;
+        }
+
+        function displayHolidays() {
+            const holidaysContainer = document.getElementById('holidays');
+            const upcomingHolidays = holidays
+                .map(holiday => ({
+                    ...holiday,
+                    daysRemaining: calculateDaysRemaining(holiday.date)
+                }))
+                .sort((a, b) => a.daysRemaining - b.daysRemaining);
+
+            upcomingHolidays.forEach(holiday => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${holiday.name}</td>
+                    <td>${holiday.date}</td>
+                    <td>${holiday.daysRemaining}</td>
+                `;
+                holidaysContainer.appendChild(row);
+            });
+        }
+
+        displayHolidays();
+    </script>
+</body>
+</html>
